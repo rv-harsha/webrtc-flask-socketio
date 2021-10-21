@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!--
+ *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree.
+-->
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="description" content="WebRTC code samples">
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+    <meta itemprop="description" content="Client-side WebRTC code samples">
+    <meta itemprop="image" content="../../../../images/webrtc-icon-192x192.png">
+    <meta itemprop="name" content="WebRTC code samples">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta id="theme-color" name="theme-color" content="#ffffff">
+
+    <base target="_blank">
+
+    <title>Peer connection</title>
+
+    <link rel="icon" sizes="192x192" href="../../../../images/webrtc-icon-192x192.png">
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="static/css/main2.css" />
+    <link rel="stylesheet" href="static/css/main.css" />
+
+    <!-- Filepond stylesheet -->
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+    <style>
+    .filepond--root {
+    width: 20%; 
+    }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="container">
+        <h1><a href="//webrtc.github.io/samples/" title="WebRTC samples homepage">WebRTC samples</a>
+            <span>Peer connection</span>
+        </h1>
+
+        <p>This sample shows how to setup a connection between two peers using
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection">RTCPeerConnection</a>.
+        </p>
+        <!-- Changed on 3rd -->
+        <video id="localVideo" playsinline></video>
+        <video id="remoteVideo" style="display: none" autoplay></video>
+        <img id="image"></img>
+        <canvas id="processed_image" style="display: none"></canvas>
+        <!-- Changed on 3rd -->
+
+        <!-- <div class="remoteVideo">
+            <canvas id="processed_image"></canvas>
+            
+        </div> -->
+
+        <div class="box">
+            <button id="startButton">Start</button>
+            <button id="callButton">Call</button>
+            <button id="hangupButton">Hang Up</button>
+            <canvas id="canvasOutput" style="display: none;"></canvas>
+        </div>
+
+        <!-- We'll transform this input into a pond -->
+        <input type="file" class="my-pond" name="UploadVideo">
+
+
+
+        <p>View the console to see logging. The <code>MediaStream</code> object <code>localStream</code>, and the
+            <code>RTCPeerConnection</code>
+            objects <code>pc1</code> and <code>pc2</code> are in global scope, so you can inspect them in the console as
+            well.
+        </p>
+
+        <!--<p>For more information about RTCPeerConnection, see <a
+                href="http://www.html5rocks.com/en/tutorials/webrtc/basics/"
+                title="HTML5 Rocks article about WebRTC by Sam Dutton">Getting
+                Started With WebRTC</a>.</p>
+
+
+        <a href="https://github.com/webrtc/samples/tree/gh-pages/src/content/peerconnection/pc1"
+            title="View source for this page on GitHub" id="viewSource">View source on GitHub</a> -->
+
+    </div>
+    
+    <!-- Load FilePond library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.min.js" integrity="sha512-2hIBfT6wur46uR5ayhmyICuA8s15BvJhagB+jZImgktQAy832P7EuY8njl1HGp4YS0Sk8DXRo9dByhvD3jfDxA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+
+    <!-- include FilePond plugins -->
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+
+
+    <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
+
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="static/js/main.js" async></script>
+    <script>
+        $(function () {
+
+            // First register any plugins
+            $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
+
+            // Turn input element into a pond
+            $('.my-pond').filepond();
+
+            $('.my-pond').filepond.setOptions({
+                server: {
+                    url: '/upload',
+                    process: '/video'
+                }
+            });
+
+            // Set allowMultiple property to true
+            $('.my-pond').filepond({
+                'allowMultiple': false,
+                'credits': false,
+                'labelIdle': 'Upload Video'
+            });
+
+            // Listen for addfile event
+            $('.my-pond').on('FilePond:addfile', function (e) {
+                console.log('file added event', e);
+            });
+
+            $('.my-pond').on('FilePond:processfile', function (e) {
+                console.log('file processed event',e);
+                $('#startButton').prop('disabled', false);
+                $("#localVideo").html("<source src=\"/static/tmp/Tent.mp4\" type=\"video/mp4\"></source>");
+            });
+
+            
+        });
+
+    </script>
+    <script src="static/js/lib/ga.js"></script>
+</body>
+
+</html>
