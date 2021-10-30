@@ -28,7 +28,7 @@ def upload_file():
         # f.save('static/'+secure_filename(f.filename))
         f.save('static/tmp/'+secure_filename(f.filename))
         return 'file uploaded successfully'
-
+        
 
 @socketio.on('image')
 def image(data_image):
@@ -61,8 +61,6 @@ def image(data_image):
     emit('response_back', stringData)
 
 @socketio.on('keypoint')
-
-
 def image(data_image):
 
     sbuf = StringIO()
