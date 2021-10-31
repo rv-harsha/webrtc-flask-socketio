@@ -1,5 +1,4 @@
-# webrtc-flask-socketio
+# Video conferencing app with WebRTC Peer to Peer connection and Flask-SocketIO backend
 Demo webrtc app with flask backend and socketio 
 
-
-Install the required Libraries and run the upload.py using "python upload.py"
+### In Progress
